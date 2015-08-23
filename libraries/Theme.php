@@ -406,11 +406,11 @@ class Theme {
 	static public function footer_start($class='') {
 		echo '</div>'; /* end form body wrapper */
 		echo '<div class="form-footer-buttons '.$class.'">';
-		echo '<div class="col-md-2"></div><div class="col-md-10">';
+		echo '<div class="col-md-11 text-right">';
 	}
 
 	static public function footer_end() {
-		echo '</div></div></div>';
+		echo '</div><div class="col-md-1"></div></div><div>&nbsp;</div>';
 	}
 
 	static public function footer_cancel_button($href = null,$text='Cancel',$extra=[]) {
