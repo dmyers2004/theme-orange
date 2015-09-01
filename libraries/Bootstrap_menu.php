@@ -1,4 +1,10 @@
 <?php
+/*
+$config['Show Class'] = false;
+$config['Root User Menu'] = 'username';
+$config['Childern User Menus'] = ['email','role_name'];
+$config['Backend Root Menu'] = 0;
+*/
 
 class bootstrap_menu {
 	
@@ -61,7 +67,7 @@ class bootstrap_menu {
 	}
 
 	static public function user() {
-		$childern = (array)setting('menubar','Childern User Menus');
+		$childern = explode(',',setting('menubar','Childern User Menus'));
 
 		$user_navigation_menu = '';
 
@@ -106,7 +112,8 @@ class bootstrap_menu {
 		
 		echo '</ul><ul class="nav navbar-nav navbar-right">';
 		
-		if (ci()->user->is_active) {
+		/* if they are a guest then they don't have a user menu */
+		if (ci()->user->role_id != setting('auth','Guest Id')) {
 			self::right();
 			echo '<li class="dropdown"><a href="#" class="dropdown-toggle gravatar" data-toggle="dropdown" role="button" aria-expanded="false">';
 			self::user_text();
