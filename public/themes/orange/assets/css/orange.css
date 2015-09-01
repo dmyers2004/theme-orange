@@ -33,13 +33,6 @@ body {
 	font-weight: bold;
 }
 
-/* my own */
-.txt-ac {
-	text-align: center;
-}
-.txt-ar {
-	text-align: right;
-}
 .larger i.fa {
 	font-size: 130%;
 }
