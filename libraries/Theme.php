@@ -453,8 +453,9 @@ class Theme {
 	static public function panel_end() {
 		echo '</div></div>';
 	}
-
-	static public function format_value($value,$length=128) {
+	
+	/* wrap passed value in a class depending on what it is */
+	static public function format_value($value,$length=8192) {
 		/* type label */
 		$class_map = [
 			'string'=>'type-string',
@@ -469,16 +470,10 @@ class Theme {
 		];
 
 		/* default */
-		$type = 'string';
+		$type = 'unknown';
 		$show = $value;
 
-		/* is it JSON? if not this will return null */
-		$is_json = @json_decode($value, true);
-
-		if ($is_json !== null) {
-			$type = 'json';
-			$show = var_export($is_json,true);
-		} elseif (is_array($value)) {
+		if (is_array($value)) {
 			$type = 'array';
 			$show = var_export($value,true);
 		} elseif (trim(strtolower($value)) == 'true') {
@@ -505,6 +500,16 @@ class Theme {
 			} else {
 				$type = 'double';
 				$show = (int)$value;
+			}
+		} elseif (gettype($value) == 'string') {
+			$is_json = json_decode($value,true);
+
+			if ($is_json !== null) {
+				$type = 'json';
+				$show = var_export($is_json,true);
+			} else {		
+				$type = 'string';
+				$show = $value;
 			}
 		}
 
