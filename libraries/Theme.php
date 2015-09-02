@@ -454,4 +454,65 @@ class Theme {
 		echo '</div></div>';
 	}
 
+	static public function format_value($value,$length=128) {
+		/* type label */
+		$class_map = [
+			'string'=>'type-string',
+			'array'=>'type-array',
+			'json'=>'type-json',
+			'true'=>'label label-success',
+			'false'=>'label label-danger',
+			'null'=>'label label-default',
+			'integer'=>'label label-info',
+			'double'=>'label label-warning',
+			'x'=>'label label-primary',
+		];
+
+		/* default */
+		$type = 'string';
+		$show = $value;
+
+		/* is it JSON? if not this will return null */
+		$is_json = @json_decode($value, true);
+
+		if ($is_json !== null) {
+			$type = 'json';
+			$show = var_export($is_json,true);
+		} elseif (is_array($value)) {
+			$type = 'array';
+			$show = var_export($value,true);
+		} elseif (trim(strtolower($value)) == 'true') {
+			$type = 'true';
+			$show = 'true';
+		} elseif (trim(strtolower($value)) == 'false') {
+			$type = 'false';
+			$show = 'false';
+		} elseif (trim(strtolower($value)) == 'null' || gettype($value) == 'null') {
+			$type = 'null';
+			$show = 'null';
+		} elseif (gettype($value) == 'boolean') {	
+			if ($value === true) {
+				$type = 'true';
+				$show = 'true';
+			} else {
+				$type = 'false';
+				$show = 'false';
+			}
+		} elseif (is_numeric($value) || (gettype($value) == 'integer' || gettype($value) == 'double')) {
+			if (is_float($value)) {
+				$type = 'integer';
+				$show = (float)$value;
+			} else {
+				$type = 'double';
+				$show = (int)$value;
+			}
+		}
+
+		/* does it need to be shortened? */
+		$hellip = (strlen($show) > $length) ? '&hellip;' : '';
+
+		/* wrap with label */
+		return '<span class="'.$class_map[$type].'">'.htmlentities(substr($show,0,$length)).$hellip.'</span>';
+	}
+
 }/* end class */
