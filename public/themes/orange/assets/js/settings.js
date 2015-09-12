@@ -11,26 +11,26 @@ $('.js-validate-json').on('keyup focus click',function(e){
 
 $('.js-add-link').on('click',function(e){
 	e.preventDefault();
-	
+
 	var that = this;
-	
+
 	$.ajax({
-	  url: $(this).attr('href'),
-	  dataType: 'json',
-	  success: function(data) {
-	  	if (data.err === true) {
-	  		$.noticeAdd({"text":"Error Adding Setting","stay":true,"type":"danger"});
-	  	} else {
-	  		$.noticeAdd({"text":"Setting Added","stay":false,"type":"info"});
-	  		
-	  		/* remove the + button */
-	  		$(that).remove();
-	  	}
-	  },
-	  error: function() {
-  		$.noticeAdd({"text":"Error Adding Setting","stay":true,"type":"danger"});
-	  }
-	});	
+		url: $(this).attr('href'),
+		dataType: 'json',
+		success: function(data) {
+			if (data.err === true) {
+				$.noticeAdd({"text":"Error Adding Setting","stay":true,"type":"danger"});
+			} else {
+				$.noticeAdd({"text":"Setting Added","stay":false,"type":"info"});
+
+				/* remove the + button */
+				$(that).remove();
+			}
+		},
+		error: function() {
+			$.noticeAdd({"text":"Error Adding Setting","stay":true,"type":"danger"});
+		}
+	});
 
 });
 
@@ -40,6 +40,6 @@ function IsJsonString(str) {
 	} catch (e) {
 		return false;
 	}
-	
+
 	return true;
 }
