@@ -2,5 +2,6 @@
   "name": "Orange Admin Theme",
   "version": "1.0.0",
   "info": "The Default Admin Theme",
-  "type": "theme"
+  "type": "theme",
+  "priority": 10
 }
