@@ -171,11 +171,30 @@ class Theme {
 		echo self::fa_icon_rtn($faicon);
 	}
 
-	static public function portal_start($height = 150, $padding = 3) {
+	static public function portal_header_start($title='',$extra=[]) {
+		echo '<div style="background-color:#eee;border-left: 1px #ccc solid;border-right: 1px #ccc solid;border-top: 1px #ccc solid; padding: 6px; width: 100%; text-align:right">';
+		echo '<div style="width:50%;display:inline-block;text-align:left;font-weight:bold">'.$title.'</div>';
+		echo '<div style="width:50%;display:inline-block">';
+	}
+
+	static public function portal_header_button($path,$icon,$text,$url,$id,$extra=[]) {
+		echo '<button type="button" data-child_id="'.$id.'" data-url="'.ci()->page->data('controller_path').'/new_child" class="btn btn-default btn-xs add_child"><i class="fa fa-magic"></i> Add</button> ';
+	}
+
+	static public function portal_header_end() {
+		echo '</div>';
+		echo '</div>';
+		/* !todo add the css and js */
+	}
+
+	static public function portal_start($height = 150, $padding = 3,$extra=[]) {
+		$defaults = ['class' => '', 'id' => ''];
+		$list     = array_merge($defaults, (array) $extra);
+		
 		$height  = (!is_numeric($height)) ? $height : $height.'px';
 		$padding = (!is_numeric($padding)) ? $padding : $padding.'px';
 
-		echo '<div style="border: 1px #ccc solid; padding: '.$padding.'; width: 100%;height: '.$height.'; overflow: auto">';
+		echo '<div id="'.$list['id'].'" class="'.$list['class'].'" style="border: 1px #ccc solid; padding: '.$padding.'; width: 100%;height: '.$height.'; overflow-x: hidden; overflow-y: auto">';
 	}
 
 	static public function portal_end() {
