@@ -177,8 +177,8 @@ class Theme {
 		echo '<div style="width:50%;display:inline-block">';
 	}
 
-	static public function portal_header_button($path,$icon,$text,$url,$id,$extra=[]) {
-		echo '<button type="button" data-child_id="'.$id.'" data-url="'.ci()->page->data('controller_path').'/new_child" class="btn btn-default btn-xs add_child"><i class="fa fa-magic"></i> Add</button> ';
+	static public function portal_header_button($copy,$icon,$extra=[]) {
+		echo '<button type="button" '.o::convert2attributes($extra).'><i class="fa fa-'.$icon.'"></i> '.$copy.'</button>';
 	}
 
 	static public function portal_header_end() {
