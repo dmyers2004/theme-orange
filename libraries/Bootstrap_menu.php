@@ -94,7 +94,9 @@ class bootstrap_menu {
 		return ci()->user->$root;
 	}
 
-	/* complete */
+	/* 
+	Hidden On: /dashboard/*,/foo/bar/*,/cookies/monster
+	*/
 	static public function nav() {
 		$hidden_on = setting('menubar','Hidden On','');
 		$nav = '';
