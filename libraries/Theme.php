@@ -202,7 +202,7 @@ class Theme {
 	}
 
 	static public function return_to_top() {
-		echo '<small class="pull-right"><a style="color:#aaa" onclick="$(\'html, body\').animate({ scrollTop: 0 }, \'fast\');">Return to top</a></small>';
+		echo '<small id="return-to-top" class="pull-right"><a style="color:#aaa" onclick="$(\'html, body\').animate({ scrollTop: 0 }, \'fast\');">Return to top</a></small>';
 	}
 
 	static public function help($help=null) {
