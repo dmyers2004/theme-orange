@@ -297,10 +297,11 @@ class Theme {
 		echo '<tr'.$trclass.'><td'.$tdclass.'>';
 	}
 
-	static public function table_row($class = null) {
+	static public function table_row($class = null,$extra=[]) {
 		$class = ($class) ? ' class="'.$class.'"' : '';
+		$extra = o::convert2attributes($extra);
 
-		echo '</td><td'.$class.'>';
+		echo '</td><td'.$class.' '.$extra.'>';
 	}
 
 	static public function table_action($icon, $url, $extra = []) {
