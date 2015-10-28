@@ -23,6 +23,7 @@ function orange_theme_setup(&$page,$path) {
 		->css([
 			'//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css',
 			'//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css',
+			'//fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic',
 			$path.'/assets/css/orange.min.css',
 		]);
 }
