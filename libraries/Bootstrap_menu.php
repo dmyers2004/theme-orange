@@ -94,31 +94,33 @@ class bootstrap_menu {
 		return ci()->user->$root;
 	}
 
-	/* complete */
+	/*
+	Hidden On: /dashboard/*,/foo/bar/*,/cookies/monster
+	*/
 	static public function nav() {
 		$hidden_on = setting('menubar','Hidden On','');
 		$nav = '';
-		
+
 		if (!empty($hidden_on)) {
 			if (!preg_match('@,'.str_replace('*','[^,]*',$hidden_on).'@',',/'.ci()->uri->uri_string(),$matches)) {
-		
+
 				$nav .= '<nav class="navbar navbar-'.setting('menubar','Inverse Menubar','inverse').' navbar-fixed-top">
 					<div class="container">
 						<div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 								<span class="sr-only">Toggle</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>';
-			
+
 				if (ci()->user->is_active) {
 					$nav .= '<a class="navbar-brand" title="Project Orange Box" href="'.setting('auth','URL Dashboard').'"><img src="/themes/orange/assets/images/box.png" width="32" height="32" style="top:4px;position:relative;"></a>';
 				}
-			
+
 				$nav .= '</div><div id="navbar" class="navbar-collapse collapse"><ul class="nav navbar-nav">';
-			
+
 				if (ci()->user->is_active) {
 					$nav .= self::left();
 				}
-			
+
 				$nav .= '</ul><ul class="nav navbar-nav navbar-right">';
-			
+
 				/* if they are a guest then they don't have a user menu */
 				if (ci()->user->role_id != setting('auth','Guest Id')) {
 					$nav .= self::right();
@@ -127,12 +129,14 @@ class bootstrap_menu {
 					$nav .= '<span class="caret"></span></a><ul class="dropdown-menu" role="menu">';
 					$nav .= self::user();
 					$nav .= '</ul></li>';
+				} elseif (setting('menubar','Show Login')) {
+					$nav .= '<li><a href="'.setting('auth','URL Login').'">Login</a></li>';
 				}
-			
+
 				$nav .= '</ul></div></div></nav>';
 			}
 		}
-		
+
 		return $nav;
 	}
 

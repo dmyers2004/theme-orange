@@ -171,11 +171,30 @@ class Theme {
 		echo self::fa_icon_rtn($faicon);
 	}
 
-	static public function portal_start($height = 150, $padding = 3) {
+	static public function portal_header_start($title='',$extra=[]) {
+		echo '<div style="background-color:#eee;border-left: 1px #ccc solid;border-right: 1px #ccc solid;border-top: 1px #ccc solid; padding: 6px; width: 100%; text-align:right">';
+		echo '<div style="width:50%;display:inline-block;text-align:left;font-weight:bold">'.$title.'</div>';
+		echo '<div style="width:50%;display:inline-block">';
+	}
+
+	static public function portal_header_button($copy,$icon,$extra=[]) {
+		echo '<button type="button" '.o::convert2attributes($extra).'><i class="fa fa-'.$icon.'"></i> '.$copy.'</button>';
+	}
+
+	static public function portal_header_end() {
+		echo '</div>';
+		echo '</div>';
+		/* !todo add the css and js */
+	}
+
+	static public function portal_start($height = 150, $padding = 3,$extra=[]) {
+		$defaults = ['class' => '', 'id' => ''];
+		$list     = array_merge($defaults, (array) $extra);
+		
 		$height  = (!is_numeric($height)) ? $height : $height.'px';
 		$padding = (!is_numeric($padding)) ? $padding : $padding.'px';
 
-		echo '<div style="border: 1px #ccc solid; padding: '.$padding.'; width: 100%;height: '.$height.'; overflow: auto">';
+		echo '<div id="'.$list['id'].'" class="'.$list['class'].'" style="border: 1px #ccc solid; padding: '.$padding.'; width: 100%;height: '.$height.'; overflow-x: hidden; overflow-y: auto">';
 	}
 
 	static public function portal_end() {
@@ -183,7 +202,7 @@ class Theme {
 	}
 
 	static public function return_to_top() {
-		echo '<small class="pull-right"><a style="color:#aaa" onclick="$(\'html, body\').animate({ scrollTop: 0 }, \'fast\');">Return to top</a></small>';
+		echo '<small id="return-to-top" class="pull-right"><a style="color:#aaa" onclick="$(\'html, body\').animate({ scrollTop: 0 }, \'fast\');">Return to top</a></small>';
 	}
 
 	static public function help($help=null) {
@@ -212,7 +231,7 @@ class Theme {
 			return;
 		}
 
-		$defaults = ['class' => '', 'style' => '', 'id' => ''];
+		$defaults = ['class' => '', 'style' => '', 'id' => '','tbody_class' => ''];
 		extract(array_diff_key($defaults, $extra) + array_intersect_key($extra, $defaults));
 
 		echo '<table class="table table-hover '.$class.'" id="'.$id.'" style="'.$style.'"><thead><tr class="panel-default">';
@@ -228,7 +247,7 @@ class Theme {
 			echo '<th class="panel-heading '.$class.'">'.$name.'</th>';
 		}
 
-		echo '</tr></thead><tbody>';
+		echo '</tr></thead><tbody class="'.$tbody_class.'">';
 	}
 
 	/* table tabs */
@@ -278,10 +297,11 @@ class Theme {
 		echo '<tr'.$trclass.'><td'.$tdclass.'>';
 	}
 
-	static public function table_row($class = null) {
+	static public function table_row($class = null,$extra=[]) {
 		$class = ($class) ? ' class="'.$class.'"' : '';
+		$extra = o::convert2attributes($extra);
 
-		echo '</td><td'.$class.'>';
+		echo '</td><td'.$class.' '.$extra.'>';
 	}
 
 	static public function table_action($icon, $url, $extra = []) {
