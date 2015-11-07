@@ -1,42 +1,66 @@
 <?php
-/*
-$config['Show Class'] = false;
-$config['Root User Menu'] = 'username';
-$config['Childern User Menus'] = ['email','role_name'];
-$config['Backend Root Menu'] = 0;
-$config['Hidden On'] = '';
-*/
 
 class bootstrap_menu {
-
-	static public function left() {
-		$start_at = 0;
-		$filter_empty = true;
+	static protected $all_menus;
+	static protected $menus;
+	
+	/*
+	Hidden On: /dashboard/*,/foo/bar/*,/cookies/monster
+	*/
+	static public function nav($left_menu=-1,$right_menu=-1) {
+		$hidden_on = setting('menubar','Hidden On','*SHOWONALL*');
+		$left_root_menu = setting('menubar','Left Root Menu',$left_menu);
+		$right_root_menu = setting('menubar','Right Root Menu',$right_menu);
 
 		/* first we get all menus this user has access to */
-		$all_menus = ci()->o_menubar_model->get_menus(array_keys(ci()->user->access));
+		self::$all_menus = ci()->o_menubar_model->get_menus(array_keys(ci()->user->access));
 
 		/* then we build the menus array */
-		$menus = ci()->o_menubar_model->get_menus_ordered_by_parent_ids($all_menus);
+		self::$menus = ci()->o_menubar_model->get_menus_ordered_by_parent_ids(self::$all_menus);
+		
+		/* now we build the left and right menus */
+		$nav = '';
 
+		if (!empty($hidden_on)) {
+			if (!preg_match('@,'.str_replace('*','[^,]*',$hidden_on).'@',',/'.ci()->uri->uri_string(),$matches)) {
+				$nav .= '<nav class="navbar navbar-'.setting('menubar','Inverse Menubar','inverse').' navbar-fixed-top">';
+				$nav .= '<div class="container">';
+				$nav .= '<div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">';
+				$nav .= '<span class="sr-only">Toggle</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>';
+				$nav .= '</div><div id="navbar" class="navbar-collapse collapse"><ul class="nav navbar-nav">';
+				$nav .= self::build($left_root_menu);
+				$nav .= '</ul><ul class="nav navbar-nav navbar-right">';
+				$nav .= self::build($right_root_menu);
+				$nav .= '</ul></div></div></nav>';
+			}
+		}
+
+		return $nav;
+	}
+	
+	static protected function build($start_at,$filter_empty=true) {
 		$new_menus = [];
 
-		if (is_array($menus)) {
-			foreach ($menus[$start_at] as $key => $item) {
+		if (is_array(self::$menus)) {
+			foreach (self::$menus[$start_at] as $key => $item) {
 				$new_menus[$key]['class'] = $item->class;
 				$new_menus[$key]['href']  = rtrim($item->url, '/#');
 				$new_menus[$key]['text']  = $item->text;
 				$new_menus[$key]['color'] = $item->color;
 				$new_menus[$key]['icon'] = $item->icon;
+				$new_menus[$key]['target'] = $item->target;
 
-				if (isset($menus[$key])) {
+				if (isset(self::$menus[$key])) {
 					/* has children */
-					foreach ($menus[$key] as $key2 => $item2) {
-						$new_menus[$key]['childern'][$key2]['class'] = $menus[$key][$key2]->class;
-						$new_menus[$key]['childern'][$key2]['href']  = rtrim($menus[$key][$key2]->url, '/');
-						$new_menus[$key]['childern'][$key2]['text']  = $menus[$key][$key2]->text;
-						$new_menus[$key]['childern'][$key2]['icon']  = $menus[$key][$key2]->icon;
-						$new_menus[$key]['childern'][$key2]['color']  = $menus[$key][$key2]->color;
+					foreach (self::$menus[$key] as $key2 => $item2) {
+						$href = (self::$menus[$key][$key2]->url == '/') ? '/' : rtrim(self::$menus[$key][$key2]->url, '/');
+					
+						$new_menus[$key]['childern'][$key2]['class'] = self::$menus[$key][$key2]->class;
+						$new_menus[$key]['childern'][$key2]['href']  = $href;
+						$new_menus[$key]['childern'][$key2]['text']  = self::$menus[$key][$key2]->text;
+						$new_menus[$key]['childern'][$key2]['icon']  = self::$menus[$key][$key2]->icon;
+						$new_menus[$key]['childern'][$key2]['color']  = self::$menus[$key][$key2]->color;
+						$new_menus[$key]['childern'][$key2]['target']  = self::$menus[$key][$key2]->target;
 					}
 				}
 			}
@@ -51,93 +75,11 @@ class bootstrap_menu {
 			}
 		}
 
-		$left_navigation_menu = self::build_twitter_bootstrap_menu($new_menus);
+		$navigation_menu = self::build_twitter_bootstrap_menu($new_menus);
 
-		ci()->event->trigger('menubar.left_navigation_menu',$left_navigation_menu,$start_at,$access,$filter_empty);
+		ci()->event->trigger('menubar.right_navigation_menu',$navigation_menu,$start_at,$access,$filter_empty);
 
-		return $left_navigation_menu;
-	}
-
-	static public function right() {
-		/* Example: <li><a href="#"><i class="fa fa-envelope"></i> <span class="badge">42</span></a></li> */
-		$right_navigation_menu = '';
-
-		ci()->event->trigger('menubar.right_navigation_menu',$right_navigation_menu,$start_at,$access,$filter_empty);
-
-		return $right_navigation_menu;
-	}
-
-	static public function user() {
-		$childern = explode(',',setting('menubar','Childern User Menus'));
-
-		$user_navigation_menu = '';
-
-		foreach ($childern as $c) {
-			$user_navigation_menu .= '<li class="dropdown-header">'.ci()->user->$c.'</li>';
-		}
-
-		if (count($childern)) {
-			$user_navigation_menu .= '<li class="divider"></li>';
-		}
-
-		$user_navigation_menu .= '<li class=""><a href="/" target="_blank">View Site</a></li>';
-		$user_navigation_menu .= '<li class=""><a href="/orange/logout">Logout</a></li>';
-
-		ci()->event->trigger('menubar.user_menu',$user_navigation_menu,$start_at,$access,$filter_empty);
-
-		return $user_navigation_menu;
-	}
-
-	static public function user_text() {
-		$root = setting('menubar','Root User Menu','username');
-
-		return ci()->user->$root;
-	}
-
-	/*
-	Hidden On: /dashboard/*,/foo/bar/*,/cookies/monster
-	*/
-	static public function nav() {
-		$hidden_on = setting('menubar','Hidden On','');
-		$nav = '';
-
-		if (!empty($hidden_on)) {
-			if (!preg_match('@,'.str_replace('*','[^,]*',$hidden_on).'@',',/'.ci()->uri->uri_string(),$matches)) {
-
-				$nav .= '<nav class="navbar navbar-'.setting('menubar','Inverse Menubar','inverse').' navbar-fixed-top">
-					<div class="container">
-						<div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-								<span class="sr-only">Toggle</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>';
-
-				if (ci()->user->is_active) {
-					$nav .= '<a class="navbar-brand" title="Project Orange Box" href="'.setting('auth','URL Dashboard').'"><img src="/themes/orange/assets/images/box.png" width="32" height="32" style="top:4px;position:relative;"></a>';
-				}
-
-				$nav .= '</div><div id="navbar" class="navbar-collapse collapse"><ul class="nav navbar-nav">';
-
-				if (ci()->user->is_active) {
-					$nav .= self::left();
-				}
-
-				$nav .= '</ul><ul class="nav navbar-nav navbar-right">';
-
-				/* if they are a guest then they don't have a user menu */
-				if (ci()->user->role_id != setting('auth','Guest Id')) {
-					$nav .= self::right();
-					$nav .= '<li class="dropdown"><a href="#" class="dropdown-toggle gravatar" data-toggle="dropdown" role="button" aria-expanded="false">';
-					$nav .= self::user_text();
-					$nav .= '<span class="caret"></span></a><ul class="dropdown-menu" role="menu">';
-					$nav .= self::user();
-					$nav .= '</ul></li>';
-				} elseif (setting('menubar','Show Login')) {
-					$nav .= '<li><a href="'.setting('auth','URL Login').'">Login</a></li>';
-				}
-
-				$nav .= '</ul></div></div></nav>';
-			}
-		}
-
-		return $nav;
+		return $navigation_menu;
 	}
 
 	static protected function build_twitter_bootstrap_menu($menu) {
@@ -146,21 +88,33 @@ class bootstrap_menu {
 		if (is_array($menu)) {
 			foreach ($menu as $item) {
 				if (isset($item['childern'])) {
+
 					/* has children */
 					$html .= '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">';
 					$html .= $item['text'].' <b class="caret"></b></a><ul class="dropdown-menu">';
+					
 					foreach ($item['childern'] as $row) {
-						$html .= '<li><a data-color="'.$row['color'].'" data-icon="'.$row['icon'].'" class="'.$row['class'].'" href="'.$row['href'].'">'.$row['text'].'</a></li>';
+						if ($row['href'] == '/#') {
+							$html .= '<li class="dropdown-header '.$row['class'].'">'.$row['text'].'</li>';
+						} else {
+							$target = ($row['target']) ? ' target="'.$row['target'].'"' : '';
+							$html .= '<li><a'.$target.' data-color="'.$row['color'].'" data-icon="'.$row['icon'].'" class="'.$row['class'].'" href="'.$row['href'].'">'.$row['text'].'</a></li>';
+						}
 					}
+					
 					$html .= '</ul></li>';
+
 				} else {
 					/* no children */
 					$html .= '<li><a class="'.$item['class'].'" href="'.$item['href'].'">'.$item['text'].'</a></li>';
 				}
 			}
 		}
+		
+		/* do the swap */
+		$user = ci()->user;
 
-		return $html;
+		return str_replace(['{name}','{role}','{email}','{hr}'],[$user->username,$user->role_name,$user->email,'<li class="divider"></li>'],$html);
 	}
 
 } /* end class */

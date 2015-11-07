@@ -78,6 +78,18 @@ table th {
 	box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
+@media (min-width: 768px) and (max-width: 2048px) {
+	/* menubar icon */
+	.menu-logo {
+		background: url('/themes/orange/assets/images/box.png') center bottom no-repeat;
+		background-size: 36px 36px;
+		text-indent: -9999px;
+		height: 38px;
+		width: 38px;
+		background-position-y: 3px;
+	}
+}
+
 @media (min-width: 1200px) {
 }
 
