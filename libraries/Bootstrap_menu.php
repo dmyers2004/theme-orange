@@ -1,9 +1,9 @@
 <?php
 
 class bootstrap_menu {
-	static protected $all_menus;
 	static protected $menus;
-	
+	static protected $cache_key;
+
 	/*
 	Hidden On: /dashboard/*,/foo/bar/*,/cookies/monster
 	*/
@@ -11,14 +11,14 @@ class bootstrap_menu {
 		$hidden_on = setting('menubar','Hidden On','*SHOWONALL*');
 		$left_root_menu = setting('menubar','Left Root Menu',$left_menu);
 		$right_root_menu = setting('menubar','Right Root Menu',$right_menu);
-
-		/* first we get all menus this user has access to */
-		self::$all_menus = ci()->o_menubar_model->get_menus(array_keys(ci()->user->access));
-
-		/* then we build the menus array */
-		self::$menus = ci()->o_menubar_model->get_menus_ordered_by_parent_ids(self::$all_menus);
 		
-		/* now we build the left and right menus */
+		/*
+		get all the menus this user has access to in parent / child order 
+		this is cached by the model based on the user access record ids
+		*/
+		$menus = ci()->o_menubar_model->get_menus_ordered_by_parent_ids(array_keys(ci()->user->access));
+
+		/* now we build the bootstrap menubar */
 		$nav = '';
 
 		if (!empty($hidden_on)) {
@@ -28,57 +28,84 @@ class bootstrap_menu {
 				$nav .= '<div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">';
 				$nav .= '<span class="sr-only">Toggle</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>';
 				$nav .= '</div><div id="navbar" class="navbar-collapse collapse"><ul class="nav navbar-nav">';
-				$nav .= self::build($left_root_menu);
+				$nav .= self::build('left',$left_root_menu,$menus);
 				$nav .= '</ul><ul class="nav navbar-nav navbar-right">';
-				$nav .= self::build($right_root_menu);
+				$nav .= self::build('right',$right_root_menu,$menus);
 				$nav .= '</ul></div></div></nav>';
 			}
 		}
-
+		
+		/* here you go! */
 		return $nav;
 	}
+
+	static protected function build($side,$start_at,$menus,$filter_empty=true) {
+		/*
+		we are going to cache this based on the parameters
+		this users access (role)
+		where we need to start for this "build"
+		weither to filter out empty parents (with no childern) 9 out of 10 time true
+		
+		NOTE: we are "cheating" a little by using the same cache prefix as the o_menubar_model
+		this way when the model flushes it's caches on CUD our cache also get's flushed
+		of course since we are tied pretty closely to the model anyway...
+		*/
+		$cache_key = 'tbl_orange_nav_'.md5(serialize($menus).$start_at.'/'.(int)$filter_empty);
+
+		if (!$navigation_menu = ci()->cache->get($cache_key)) {
+			$navigation_menu = [];
 	
-	static protected function build($start_at,$filter_empty=true) {
-		$new_menus = [];
-
-		if (is_array(self::$menus)) {
-			foreach (self::$menus[$start_at] as $key => $item) {
-				$new_menus[$key]['class'] = $item->class;
-				$new_menus[$key]['href']  = rtrim($item->url, '/#');
-				$new_menus[$key]['text']  = $item->text;
-				$new_menus[$key]['color'] = $item->color;
-				$new_menus[$key]['icon'] = $item->icon;
-				$new_menus[$key]['target'] = $item->target;
-
-				if (isset(self::$menus[$key])) {
-					/* has children */
-					foreach (self::$menus[$key] as $key2 => $item2) {
-						$href = (self::$menus[$key][$key2]->url == '/') ? '/' : rtrim(self::$menus[$key][$key2]->url, '/');
-					
-						$new_menus[$key]['childern'][$key2]['class'] = self::$menus[$key][$key2]->class;
-						$new_menus[$key]['childern'][$key2]['href']  = $href;
-						$new_menus[$key]['childern'][$key2]['text']  = self::$menus[$key][$key2]->text;
-						$new_menus[$key]['childern'][$key2]['icon']  = self::$menus[$key][$key2]->icon;
-						$new_menus[$key]['childern'][$key2]['color']  = self::$menus[$key][$key2]->color;
-						$new_menus[$key]['childern'][$key2]['target']  = self::$menus[$key][$key2]->target;
+			if (is_array($menus)) {
+				foreach ($menus[$start_at] as $key => $item) {
+					$navigation_menu[$key]['class'] = $item->class;
+					$navigation_menu[$key]['href']  = rtrim($item->url, '/#');
+					$navigation_menu[$key]['text']  = $item->text;
+					$navigation_menu[$key]['color'] = $item->color;
+					$navigation_menu[$key]['icon'] = $item->icon;
+					$navigation_menu[$key]['target'] = $item->target;
+	
+					if (isset($menus[$key])) {
+						/* has children */
+						foreach ($menus[$key] as $key2 => $item2) {
+							$href = ($menus[$key][$key2]->url == '/') ? '/' : rtrim($menus[$key][$key2]->url, '/');
+	
+							$navigation_menu[$key]['childern'][$key2]['class'] = $menus[$key][$key2]->class;
+							$navigation_menu[$key]['childern'][$key2]['href']  = $href;
+							$navigation_menu[$key]['childern'][$key2]['text']  = $menus[$key][$key2]->text;
+							$navigation_menu[$key]['childern'][$key2]['icon']  = $menus[$key][$key2]->icon;
+							$navigation_menu[$key]['childern'][$key2]['color']  = $menus[$key][$key2]->color;
+							$navigation_menu[$key]['childern'][$key2]['target']  = $menus[$key][$key2]->target;
+						}
 					}
 				}
 			}
-		}
-
-		/* filter out empty or menu items without urls */
-		if ($filter_empty) {
-			foreach ($new_menus as $idx=>$menu) {
-				if (count($menu['childern']) == 0 && $menu['href'] == '') {
-					unset($new_menus[$idx]);
+	
+			/* filter out empty or menu items without urls */
+			if ($filter_empty) {
+				foreach ($navigation_menu as $idx=>$menu) {
+					if (count($menu['childern']) == 0 && $menu['href'] == '') {
+						unset($navigation_menu[$idx]);
+					}
 				}
 			}
+			
+			/* convert the array in to bootstrap format */
+			$navigation_menu = self::build_twitter_bootstrap_menu($navigation_menu);
+			
+			/* cache it */
+			ci()->cache->save($cache_key,$navigation_menu);
 		}
 
-		$navigation_menu = self::build_twitter_bootstrap_menu($new_menus);
 
-		ci()->event->trigger('menubar.right_navigation_menu',$navigation_menu,$start_at,$access,$filter_empty);
+		/* Ok now put in the dynamic users specific values */
+		$user = ci()->user;
 
+		$navigation_menu = str_replace(['{user.username}','{user.role_name}','{user.email}','{hr}'],[$user->username,$user->role_name,$user->email,'<li class="divider"></li>'],$navigation_menu);
+		
+		/* call any listeners incase they want a wack at it */
+		ci()->event->trigger('menubar.build',$side,$navigation_menu,$start_at,$menus,$filter_empty);
+		
+		/* new menu! */
 		return $navigation_menu;
 	}
 
@@ -92,7 +119,7 @@ class bootstrap_menu {
 					/* has children */
 					$html .= '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">';
 					$html .= $item['text'].' <b class="caret"></b></a><ul class="dropdown-menu">';
-					
+
 					foreach ($item['childern'] as $row) {
 						if ($row['href'] == '/#') {
 							$html .= '<li class="dropdown-header '.$row['class'].'">'.$row['text'].'</li>';
@@ -101,7 +128,7 @@ class bootstrap_menu {
 							$html .= '<li><a'.$target.' data-color="'.$row['color'].'" data-icon="'.$row['icon'].'" class="'.$row['class'].'" href="'.$row['href'].'">'.$row['text'].'</a></li>';
 						}
 					}
-					
+
 					$html .= '</ul></li>';
 
 				} else {
@@ -110,11 +137,8 @@ class bootstrap_menu {
 				}
 			}
 		}
-		
-		/* do the swap */
-		$user = ci()->user;
 
-		return str_replace(['{name}','{role}','{email}','{hr}'],[$user->username,$user->role_name,$user->email,'<li class="divider"></li>'],$html);
+		return $html;
 	}
 
 } /* end class */
