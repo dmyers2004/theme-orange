@@ -1,9 +1,10 @@
 <?php
-theme::header_start('Packages','Package manager');
+theme::header_start('Packages');
 Plugin_search_sort::field();
-//theme::header_button('Customize Load Order',$controller_path.'/load-order','sort-amount-asc');
 o::view_event($controller_path,'header.buttons');
 theme::header_end();
+
+echo '** !todo Button logic & versions migrations needs to be rework for composer';
 
 /* display errors */
 if ($errors) {
@@ -62,8 +63,34 @@ foreach ($records as $name=>$record) {
 
 	/* Actions */
 	theme::table_row('text-center');
-	echo '<a href="'.$this->controller_path.'/install/'.$record['url_name'].'" class="btn btn-xs btn-default">install</a> ';
+	echo '<nobr>';
+	
+	/* show info buton? error or otherwise */
+	if ($record['button']['info']) {
+		//echo '<a href="'.$controller_path.'/details/'.$record['url_name'].'" class="btn btn-xs btn-primary"><i class="fa fa-question-circle"></i></a> ';
+	}
 
+	/* show install */
+	//if ($record['button']['install']) {
+		echo '<a href="'.$this->controller_path.'/install/'.$record['url_name'].'" class="btn btn-xs btn-default">install</a> ';
+	//}
+
+	/* show upgrade */
+	//if ($record['button']['upgrade']) {
+		echo '<a href="'.$this->controller_path.'/upgrade/'.$record['url_name'].'" class="btn btn-xs btn-info">upgrade</a> ';
+	//}
+
+	/* show uninstall */
+	//if ($record['button']['uninstall']) {
+		echo '<a href="'.$this->controller_path.'/uninstall/'.$record['url_name'].'" data-name="'.$record['name'].'" class="btn btn-xs btn-warning js-uninstallable">Uninstall</a> ';
+	//}
+	
+	/* show delete */
+	if ($record['button']['delete']) {
+		echo '<a href="'.$this->controller_path.'/delete/'.$record['url_name'].'" data-name="'.$record['name'].'" data-redirect="true" data-icon="trash" data-text="Are you sure you want to delete this package?" data-heading="Delete Record" class="btn btn-xs btn-danger js-o_dialog"><i class="fa fa-trash"></i></a> ';
+	}
+
+	echo '</nobr>';
 	theme::table_end_tr();
 }
 
