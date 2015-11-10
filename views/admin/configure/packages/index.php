@@ -4,7 +4,7 @@ Plugin_search_sort::field();
 o::view_event($controller_path,'header.buttons');
 theme::header_end();
 
-echo '** !todo Button logic & versions migrations needs to be rework for composer';
+echo '** !todo<br>Button logic & versions migrations needs to be rework for composer<br>installation, removal, requirements are now managed by composer';
 
 /* display errors */
 if ($errors) {
@@ -15,7 +15,7 @@ if ($errors) {
 	echo '</div>';
 }
 
-theme::table_start(['Name','Type'=>'text-center','Description','Version'=>'text-center','Actions'=>'text-center'],['tbody_class'=>'searchable','class'=>'sortable'],$records);
+theme::table_start(['Name','Type'=>'text-center','Description','Migration'=>'text-center','Actions'=>'text-center'],['tbody_class'=>'searchable','class'=>'sortable'],$records);
 
 //kd($records);
 
@@ -23,19 +23,17 @@ foreach ($records as $name=>$record) {
 	/* Name */
 	theme::table_start_tr();
 	echo '<span style="';
-	echo ($record['is_active']) ? 'font-weight: 700">' : '">';
-	o::e($record['name']);
+	echo ($record['database']['is_active']) ? 'font-weight: 700">' : '">';
+	o::e($record['composer']['name']);
 	echo '</span>';
 
 	/* type */
 	theme::table_row('text-center');
-	echo '<a href="'.$controller_path.'/search/'.$record['type'].'">';
-	echo '<span class="label label-'.$type_map[$record['type']].'">'.$record['type'].'</span>';
-	echo '</a>';
+	echo '<span class="label label-'.$type_map[$record['composer']['orange']['type']].'">'.$record['composer']['orange']['type'].'</span>';
 
 	/* Description */
 	theme::table_row();
-	o::e($record['description']);
+	o::e($record['composer']['description']);
 	echo ' <a href="'.$controller_path.'/details/'.$record['url_name'].'"><i class="fa fa-info-circle"></i></a> ';
 
 	/* Version */
@@ -72,24 +70,19 @@ foreach ($records as $name=>$record) {
 
 	/* show install */
 	//if ($record['button']['install']) {
-		echo '<a href="'.$this->controller_path.'/install/'.$record['url_name'].'" class="btn btn-xs btn-default">install</a> ';
+		echo '<a href="'.$this->controller_path.'/install/'.$record['url_name'].'" class="btn btn-xs btn-default">Activate</a> ';
 	//}
 
 	/* show upgrade */
 	//if ($record['button']['upgrade']) {
-		echo '<a href="'.$this->controller_path.'/upgrade/'.$record['url_name'].'" class="btn btn-xs btn-info">upgrade</a> ';
+		echo '<a href="'.$this->controller_path.'/upgrade/'.$record['url_name'].'" class="btn btn-xs btn-info">Migrate</a> ';
 	//}
 
 	/* show uninstall */
 	//if ($record['button']['uninstall']) {
-		echo '<a href="'.$this->controller_path.'/uninstall/'.$record['url_name'].'" data-name="'.$record['name'].'" class="btn btn-xs btn-warning js-uninstallable">Uninstall</a> ';
+		echo '<a href="'.$this->controller_path.'/uninstall/'.$record['url_name'].'" data-name="'.$record['name'].'" class="btn btn-xs btn-warning">Uninstall</a> ';
 	//}
 	
-	/* show delete */
-	if ($record['button']['delete']) {
-		echo '<a href="'.$this->controller_path.'/delete/'.$record['url_name'].'" data-name="'.$record['name'].'" data-redirect="true" data-icon="trash" data-text="Are you sure you want to delete this package?" data-heading="Delete Record" class="btn btn-xs btn-danger js-o_dialog"><i class="fa fa-trash"></i></a> ';
-	}
-
 	echo '</nobr>';
 	theme::table_end_tr();
 }
