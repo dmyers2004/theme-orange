@@ -32,25 +32,23 @@ class packagesController extends APP_AdminController {
 			->build($this->controller_path.'/index');
 	}
 
-	public function installAction($package=null) {
-		$this->_process($package,'install');
-
-		redirect($this->controller_path);
+	public function activateAction($package=null) {
+		$this->_process($package,'activate','activated');
 	}
 
-	public function upgradeAction($package=null) {
-		$this->_process($package,'upgrade');
+	public function deactivateAction($package=null) {
+		$this->_process($package,'deactivate','deactivated');
+	}
 
-		redirect($this->controller_path);
+	public function migrateAction($package=null) {
+		$this->_process($package,'migrate','updated');
 	}
 
 	public function uninstallAction($package=null) {
-		$this->_process($package,'uninstall');
-
-		redirect($this->controller_path);
+		$this->_process($package,'uninstall','uninstalled');
 	}
 
-	public function detailsAction($package) {
+	public function detailsAction($package=null) {
 		$package = hex2bin($package);
 
 		$this->page
@@ -61,10 +59,21 @@ class packagesController extends APP_AdminController {
 			->build();
 	}
 
-	protected function _process($name,$method) {
-		$map = ['install'=>'installed','uninstall'=>'uninstalled','delete'=>'deleted','upgrade'=>'upgraded'];
+	public function autoloadAction() {
+		$this->_process(null,'create_autoload','Autoload Updated');
+	}
+	
+	public function onloadAction() {
+		$this->_process(null,'create_onload','Onload Updated');
+	}
 
-		$package = hex2bin($name);
+	protected function _process($name,$method,$action) {
+		$packagename = '';
+
+		if ($name !== null) {
+			$key = hex2bin($name);
+			$packagename = 'Package "'.$this->package_manager->packages[$key]['composer']['name'].'" ';
+		}
 
 		/* dump all caches */
 		$this->cache->clean();
@@ -72,15 +81,11 @@ class packagesController extends APP_AdminController {
 		/* also refresh the user data */
 		$this->auth->refresh_userdata();
 
-		if ($this->package_manager->$method($package) !== true) {
-			$this->wallet->failed(ucfirst($method).' Error');
-
-			return false;
+		if ($this->package_manager->$method($key)) {
+			$this->wallet->success($packagename.$action.'.',$this->controller_path);
 		}
 
-		$this->wallet->success('Package "'.$package.'" '.$map[$method].'.');
-
-		return true;
+		$this->wallet->failed(ucfirst(str_replace('_',' ',$method)).' Error',$this->controller_path);
 	}
 
 } /* end class */
