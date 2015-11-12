@@ -105,7 +105,7 @@ theme::header_end();
 
 	<tr>
 		<td>Installed Version</td>
-		<td><?=$record['database']['migration_version'] ?></td>
+		<td><?=(empty($record['database']['migration_version'])) ? 'Never Installed' : $record['database']['migration_version'] ?></td>
 	</tr>
 
 	<tr>
@@ -115,8 +115,8 @@ theme::header_end();
 
 	<tr>
 		<td>Migration Status</td>
-		<?php $map = [1=>'less than',2=>'equal to',3=>'greater than'] ?>
-		<td>Installed version is <?=$map[$record['version_check']] ?> current package version.</td>
+		<?php $map = [1=>'Installed version is less than current package version.',2=>'Installed version is equal to current package version.',3=>'Installed version is greater than current package version.',4=>'N/A'] ?>
+		<td><?=$map[$record['version_check']] ?> </td>
 	</tr>
 
 	<tr>
@@ -150,12 +150,12 @@ theme::header_end();
 	</tr>
 
 	<tr>
-		<td>Menubar</td>
+		<td>Menubar(s)</td>
 		<td><?=str_replace(',','<br>',$record['orange']['menubar']) ?></td>
 	</tr>
 
 	<tr>
-		<td>Settings</td>
+		<td>Setting(s)</td>
 		<td><?=str_replace(',','<br>',$record['orange']['settings']) ?></td>
 	</tr>
 	
