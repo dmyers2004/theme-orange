@@ -4,7 +4,7 @@ Plugin_search_sort::field();
 o::view_event($controller_path,'header.buttons');
 theme::header_end();
 
-echo '<small style="padding: 0 0 5px;display: block;">Actual version requirements are managed by composer.</small>';
+echo '<small style="padding: 0 0 5px;display: block;">Actual version requirements are managed by composer. <i class="fa fa-archive" style="color:#E36B2A"></i> Orange Package</small>';
 
 /* display errors */
 if ($errors) {
