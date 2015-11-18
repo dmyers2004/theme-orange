@@ -4,7 +4,7 @@ Plugin_search_sort::field();
 o::view_event($controller_path,'header.buttons');
 theme::header_end();
 
-echo '<small style="padding: 0 0 5px;display: block;">Actual version requirements are now managed by composer.</small>';
+echo '<small style="padding: 0 0 5px;display: block;">Actual version requirements are now managed by composer. *Orange Packages</small>';
 
 /* display errors */
 if ($errors) {
@@ -17,7 +17,7 @@ if ($errors) {
 
 theme::table_start(['Name','Type'=>'text-center','Location'=>'text-center','Description','Migration'=>'text-center','Actions'=>'text-center'],['tbody_class'=>'searchable','class'=>'sortable'],$records);
 
-//kd($records);
+//k($records);
 
 foreach ($records as $name=>$record) {
 	/* Name */
@@ -64,7 +64,7 @@ foreach ($records as $name=>$record) {
 	if ($record['buttons']['deactivate']) {
 		echo '<a href="'.$this->controller_path.'/deactivate/'.$record['url_name'].'" class="btn btn-xs btn-danger">Deactivate</a> ';
 	}
-	
+
 	if ($record['buttons']['activate']) {
 		echo '<a href="'.$this->controller_path.'/activate/'.$record['url_name'].'" class="btn btn-xs btn-default">Activate</a> ';
 	}
@@ -78,7 +78,7 @@ foreach ($records as $name=>$record) {
 	if ($record['buttons']['uninstall']) {
 		echo '<a href="'.$this->controller_path.'/uninstall/'.$record['url_name'].'" data-name="'.$record['name'].'" class="btn btn-xs btn-warning js-uninstallable">Uninstall</a> ';
 	}
-	
+
 	echo '</nobr>';
 	theme::table_end_tr();
 }

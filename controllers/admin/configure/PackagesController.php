@@ -16,13 +16,11 @@ class packagesController extends APP_AdminController {
 	public $controller_path = '/admin/configure/packages';
 	public $controller_title = 'Package';
 	public $controller_titles = 'Packages';
-	public $libraries = 'package_manager';
+	public $libraries = ['package_manager','plugin_search_sort'];
 	public $has_access = 'Orange::Manage Packages';
 	public $type_map = [''=>'default','?'=>'danger','core_required'=>'warning','core'=>'warning','library'=>'success','libraries'=>'success','theme'=>'danger','package'=>'primary','plugin'=>'info','assets'=>'danger'];
 
 	public function indexAction() {
-		$this->load->library('plugin_search_sort');
-
 		$this->page
 			->data([
 				'type_map'=>$this->type_map,
