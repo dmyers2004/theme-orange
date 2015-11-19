@@ -39,7 +39,7 @@ foreach ($records['records'] as $tab=>$tab_records) {
 			theme::table_action('edit',$this->controller_path.'/edit/'.$record->id);
 		}
 
-		if ($record->is_editable && has_access('Orange::Advanced Settings')) {
+		if (has_access('orange::advanced settings')) {
 			theme::table_action('pencil-square',$this->controller_path.'/edit/'.$record->id.'/advanced');
 		}
 

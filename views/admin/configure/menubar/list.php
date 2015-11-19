@@ -23,15 +23,15 @@ foreach ($records as $record) {
 	theme::enum_icon($record->active);
 
 	theme::table_row('actions text-center');
-	if ($record->is_editable || has_access('Orange::Menubar::Override is editable')) {
+	if ($record->is_editable) {
 		theme::table_action('edit',$this->controller_path.'/edit/'.$record->id);
 	}
 
-	if ($record->is_editable || has_access('Orange::Advanced Menubar')) {
+	if (has_access('orange::advanced menubar')) {
 		theme::table_action('pencil-square',$this->controller_path.'/edit/'.$record->id.'/advanced');
 	}
 
-	if ($record->is_deletable || has_access('Orange::Menubar::Override is deletable')) {
+	if ($record->is_deletable) {
 		o_dialog::confirm_a_delete($this->controller_path.'/delete/'.$record->id);
 	}
 
