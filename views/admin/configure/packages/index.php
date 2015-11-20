@@ -15,7 +15,7 @@ if ($errors) {
 	echo '</div>';
 }
 
-theme::table_start(['Name','Type'=>'text-center','Location'=>'text-center','Description','Migration'=>'text-center','Actions'=>'text-center'],['tbody_class'=>'searchable','class'=>'sortable'],$records);
+theme::table_start(['Name','Type'=>'text-center','Description','Migration'=>'text-center','Actions'=>'text-center'],['tbody_class'=>'searchable','class'=>'sortable'],$records);
 
 //k($records);
 
@@ -27,14 +27,6 @@ foreach ($records as $name=>$record) {
 	/* type */
 	theme::table_row('text-center');
 	echo '<span class="label label-'.$type_map[$record['composer']['orange']['type']].'">'.$record['composer']['orange']['type'].'</span>';
-
-	/* type */
-	theme::table_row('text-center');
-	if ($record['folder'] == 'framework') {
-		echo '<span class="label label-info">packages</span>';
-	} else {
-		echo '<span class="label label-primary">vendor</span>';
-	}
 
 	/* Description */
 	theme::table_row();
