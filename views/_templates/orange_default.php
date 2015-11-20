@@ -15,7 +15,7 @@
 		<?=$page_head ?>
 	</head>
 	<body class="<?=$page_body_class ?>">
-		<?=bootstrap_menu::nav(setting('Orange Theme','Backend Left Menu'),setting('Orange Theme','Backend Right Menu')) ?>
+		<?=bootstrap_menu::nav() ?>
 		<?=$page_start ?>
 		<?=$page_header ?>
 		<div class="container">

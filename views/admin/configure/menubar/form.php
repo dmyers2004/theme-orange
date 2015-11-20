@@ -24,7 +24,7 @@ theme::start_form_section('Access',4);
 theme::access_dropdown('access_id',$record->access_id);
 theme::end_form_section();
 
-if (setting('menubar','Show Color')) {
+if (setting('Orange Theme','Show Color')) {
 	theme::start_form_section('Color',3);
 	if (ci()->load->library_exists('plugin_colorpicker')) {
 		plugin_colorpicker::picker('color',$record->color);
@@ -36,7 +36,7 @@ if (setting('menubar','Show Color')) {
 	o::hidden('color','d28445');
 }
 
-if (setting('menubar','Show Icon')) {
+if (setting('Orange Theme','Show Icon')) {
 	theme::start_form_section('Icon',3);
 	if (ci()->load->library_exists('plugin_fontawesome')) {
 		plugin_fontawesome::dropdown('icon',$record->icon);

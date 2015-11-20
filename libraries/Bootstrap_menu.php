@@ -7,11 +7,14 @@ class bootstrap_menu {
 	/*
 	Hidden On: /dashboard/*,/foo/bar/*,/cookies/monster
 	*/
-	static public function nav($left_menu=-1,$right_menu=-1,$filter_empty=true) {
-		$hidden_on = setting('menubar','Hidden On','*SHOWONALL*');
-		$left_root_menu = setting('menubar','Left Root Menu',$left_menu);
-		$right_root_menu = setting('menubar','Right Root Menu',$right_menu);
+	static public function nav($left_menu=null,$right_menu=null,$filter_empty=true) {
+		$hidden_on = setting('Orange Theme','Hidden On');
+		$left_root_menu = ($right_menu) ? $right_menu : setting('Orange Theme','Backend Left Menu');
+		$right_root_menu = ($left_menu) ? $left_menu : setting('Orange Theme','Backend Right Menu');
 
+		/* hidden on must contain something */
+		$hidden_on = (empty($hidden_on)) ? '*ALL*' : $hidden_on;
+	
 		/*
 		get all the menus this user has access to in parent / child order
 		this is cached by the model based on the user access record ids
@@ -117,8 +120,7 @@ class bootstrap_menu {
 				if (isset($item['childern'])) {
 
 					/* has children */
-					$html .= '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">';
-					$html .= $item['text'].' <b class="caret"></b></a><ul class="dropdown-menu">';
+					$html .= '<li class="dropdown"><a href="#" data-color="'.$item['color'].'" data-icon="'.$item['icon'].'" class="dropdown-toggle" data-toggle="dropdown">'.$item['text'].' <b class="caret"></b></a><ul class="dropdown-menu">';
 
 					foreach ($item['childern'] as $row) {
 						if ($row['href'] == '/#') {
@@ -133,7 +135,7 @@ class bootstrap_menu {
 
 				} else {
 					/* no children */
-					$html .= '<li><a class="'.$item['class'].'" href="'.$item['href'].'">'.$item['text'].'</a></li>';
+					$html .= '<li><a data-color="'.$item['color'].'" data-icon="'.$item['icon'].'" class="'.$item['class'].'" href="'.$item['href'].'">'.$item['text'].'</a></li>';
 				}
 			}
 		}
