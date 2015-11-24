@@ -331,6 +331,11 @@ class Theme {
 	static public function form_start($url = null, $record_id = null, $extra = []) {
 		$defaults  = ['action' => $url, 'name' => '', 'style' => '', 'id' => 'main-form', 'class' => '', 'data-validate' => 'true', 'method' => 'post', 'accept-charset' => 'utf-8'];
 		$list = array_merge($defaults, (array) $extra);
+
+		$addon_html = '';
+
+		ci()->event->trigger('theme.form_start',$list,$addon_html);
+
 		$list['class'] .= ' form-horizontal';
 
 		/* call form_helper */
@@ -340,9 +345,17 @@ class Theme {
 		if (is_scalar($record_id)) {
 			echo o::element_rtn('input', ['type' => 'hidden', 'id' => 'id', 'name' => 'id', 'value' => $record_id]);
 		}
+		
+		echo $addon_html;
 	}
 
 	static public function form_end($extra) {
+		$addon_html = '';
+
+		ci()->event->trigger('theme.form_start',$extra,$addon_html);
+
+		echo $addon_html;
+
 		o::close($extra);
 		echo '<div>&nbsp;</div>';
 	}
@@ -424,12 +437,24 @@ class Theme {
 
 	/* Form Footer */
 	static public function footer_start($class='') {
+		$addon_html = '';
+
+		ci()->event->trigger('theme.footer_start',$class,$addon_html);
+
+		echo $addon_html;
+
 		echo '</div>'; /* end form body wrapper */
 		echo '<div class="form-footer-buttons '.$class.'">';
 		echo '<div class="col-md-11 text-right">';
 	}
 
 	static public function footer_end() {
+		$addon_html = '';
+
+		ci()->event->trigger('theme.footer_end',$addon_html);
+
+		echo $addon_html;
+
 		echo '</div><div class="col-md-1"></div></div><div>&nbsp;</div>';
 	}
 
