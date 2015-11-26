@@ -63,6 +63,9 @@ class v100_theme_orange extends package_migration {
 		$this->add_setting(['name'=>'Show Color','value'=>'true','group'=>'Orange Theme','show_as'=>1]);
 		$this->add_setting(['name'=>'Hidden On','value'=>'','group'=>'Orange Theme','help'=>'dashboard/*,/foo/bar/*,/cookies/monster']);
 
+		$this->add_setting(['name'=>'admin theme folder','value'=>'_templates/orange_default','group'=>'page','internal'=>'projectorangebox/orange']);
+		$this->add_setting(['name'=>'admin theme','value'=>'projectorangebox/theme-orange','group'=>'page','internal'=>'projectorangebox/orange']);
+
 		return true;
 	}
 
