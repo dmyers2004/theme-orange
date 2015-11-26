@@ -252,19 +252,19 @@ class Theme {
 
 	/* table tabs */
 
-	static public function table_tabs($records, $extra = []) {
-		$human = $extra['human'];
-		unset($extra['human']);
-		
-		$defaults = ['class' => '', 'style' => '', 'tab_text' => 'tab_text', 'tab_name' => 'tabs', 'nav_class' => 'nav-pills', 'hash_tabs' => TRUE];
-		extract(array_diff_key($defaults, $extra)+array_intersect_key($extra, $defaults));
+	static public function table_tabs($records, $data = []) {
+		$defaults = ['nav_class'=>'nav-pills','class'=>''];
 
-		echo '<ul class="nav '.$nav_class.' js-tabs" id="tabs-'.md5(ci()->page->data('controller_titles')).'" role="tablist">';
+		$data = array_diff_key($defaults,$data) + array_intersect_key($data,$defaults);
 
-		foreach ($records as $tab_text => $record) {
+		echo '<ul class="nav '.$data['nav_class'].' js-tabs" id="tabs-'.md5(ci()->page->data('controller_titles')).'" role="tablist">';
+
+		foreach ($records as $tab_text=>$record) {
 			$tab_id = 'table-tab-'.md5($tab_text);
-			$txt = ($human) ? ucwords(strtolower(str_replace(['_','-'],' ',$record[0]->tab_text))) : $record[0]->tab_text;
-			echo '<li role="presentation" '.$class.'"><a href="#'.$tab_id.'" aria-controls="'.$tab_id.'" role="tab" data-toggle="pill">'.$txt.'</a></li>';
+
+			echo '<li role="presentation" '.$data['class'].'">';
+			echo '<a href="#'.$tab_id.'" aria-controls="'.$tab_id.'" role="tab" data-toggle="pill">'.$record[0]->tab_text.'</a>';
+			echo '</li>';
 		}
 
 		echo '</ul>';
