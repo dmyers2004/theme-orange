@@ -9,7 +9,7 @@
 * @license	http://opensource.org/licenses/MIT	MIT License
 * @link	https://github.com/dmyers2004
 */
-function orange_theme_setup(&$page) {
+function theme_onload(&$page) {
 	/* https://cdnjs.com/ */
 	$page
 		->library(['theme','bootstrap_menu','Plugin_flash_msg','Plugin_select3','Plugin_o_dialog','Plugin_o_validate_form'])
