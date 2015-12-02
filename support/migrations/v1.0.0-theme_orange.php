@@ -59,9 +59,9 @@ class v100_theme_orange extends package_migration {
 		$this->add_setting(['name'=>'Backend Left Menu','value'=>$left_menu_id,'group'=>'Orange Theme','show_as'=>3,'options'=>1]);
 		$this->add_setting(['name'=>'Backend Right Menu','value'=>$right_menu_id,'group'=>'Orange Theme','show_as'=>3,'options'=>1]);
 
-		$this->add_setting(['name'=>'Show Icon','value'=>'true','group'=>'Orange Theme','show_as'=>1]);
-		$this->add_setting(['name'=>'Show Color','value'=>'true','group'=>'Orange Theme','show_as'=>1]);
-		$this->add_setting(['name'=>'Hidden On','value'=>'','group'=>'Orange Theme','help'=>'dashboard/*,/foo/bar/*,/cookies/monster']);
+		$this->add_setting(['name'=>'Show Menubar Icon','value'=>'true','group'=>'Orange Theme','show_as'=>1]);
+		$this->add_setting(['name'=>'Show Menubar Color','value'=>'true','group'=>'Orange Theme','show_as'=>1]);
+		$this->add_setting(['name'=>'Hidden Menubar On','value'=>'','group'=>'Orange Theme','help'=>'dashboard/*,/foo/bar/*,/cookies/monster']);
 
 		$this->add_setting(['name'=>'admin theme default template','value'=>'_templates/orange_default','group'=>'page','internal'=>'projectorangebox/orange']);
 		$this->add_setting(['name'=>'admin theme folder','value'=>'projectorangebox/theme-orange','group'=>'page','internal'=>'projectorangebox/orange']);

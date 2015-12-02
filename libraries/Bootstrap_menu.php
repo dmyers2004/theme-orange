@@ -8,7 +8,7 @@ class bootstrap_menu {
 	Hidden On: /dashboard/*,/foo/bar/*,/cookies/monster
 	*/
 	static public function nav($left_menu=null,$right_menu=null,$filter_empty=true) {
-		$hidden_on = setting('Orange Theme','Hidden On');
+		$hidden_on = setting('Orange Theme','Hidden Menubar On');
 		$left_root_menu = ($right_menu) ? $right_menu : setting('Orange Theme','Backend Left Menu',1);
 		$right_root_menu = ($left_menu) ? $left_menu : setting('Orange Theme','Backend Right Menu',2);
 

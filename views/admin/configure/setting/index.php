@@ -1,5 +1,5 @@
 <?php
-$config = (CONFIG) ? 'Config "'.CONFIG.'"' : '';
+$config = (ENVIRONMENT) ? 'Config "'.ENVIRONMENT.'"' : '';
 theme::header_start('Settings','Manage application wide settings. '.$config);
 theme::header_button_new();
 theme::header_button('Built in',$controller_path.'/list-all','file');

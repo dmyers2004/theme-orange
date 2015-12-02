@@ -135,11 +135,11 @@ class settingController extends APP_AdminController {
 
 		$env_array = [];
 
-		if (CONFIG) {
-			$env_file = APPPATH.'config/'.CONFIG.'/'.$which.'.php';
+		if (ENVIRONMENT) {
+			$env_file = APPPATH.'config/'.ENVIRONMENT.'/'.$which.'.php';
 
 			if (file_exists($env_file)) {
-				include APPPATH.'config/'.CONFIG.'/'.$which.'.php';
+				include APPPATH.'config/'.ENVIRONMENT.'/'.$which.'.php';
 				$env_array = (array) $config;
 				unset($config);
 			}
