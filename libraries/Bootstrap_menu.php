@@ -26,7 +26,11 @@ class bootstrap_menu {
 
 		if (!empty($hidden_on)) {
 			if (!preg_match('@,'.str_replace('*','[^,]*',$hidden_on).'@',',/'.ci()->uri->uri_string(),$matches)) {
-				$nav .= '<nav class="navbar navbar-'.setting('menubar','Inverse Menubar','inverse').' navbar-fixed-top">';
+				$navbar = setting('Orange Themer','NavBar Inverse');
+				
+				$navbar = (!empty($navbar)) ? $navbar : 'inverse';
+
+				$nav .= '<nav class="navbar navbar-'.$navbar.' navbar-fixed-top">';
 				$nav .= '<div class="container">';
 				$nav .= '<div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">';
 				$nav .= '<span class="sr-only">Toggle</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>';

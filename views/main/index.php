@@ -1,9 +1,5 @@
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-<style>
-h2,h4,li,p {
-	font-family: 'Roboto', sans-serif;
-}
-</style>
+<style>h2,h4,li,p { font-family: 'Roboto', sans-serif }</style>
 <h2>Default View</h2>
 
 <h4>If you have not installed a public theme</h4>

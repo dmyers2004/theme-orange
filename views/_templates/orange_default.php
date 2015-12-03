@@ -10,7 +10,6 @@
 		<link rel="icon" type="image/x-icon" href="<?=$theme_path ?>/assets/images/box.png">
 		<link rel="apple-touch-icon" href="<?=$theme_path ?>/assets/images/box.png">
 		<?=$page_css ?>
-		<link href="//fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic" rel="stylesheet" type="text/css">
 		<style><?=$page_style ?></style>
 		<?=$page_head ?>
 	</head>

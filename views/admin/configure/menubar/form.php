@@ -24,31 +24,31 @@ theme::start_form_section('Access',4);
 theme::access_dropdown('access_id',$record->access_id);
 theme::end_form_section();
 
-if (setting('Orange Theme','Show Menubar Color')) {
+if (setting('Orange Theme','Show Menubar Color') || $advanced) {
 	theme::start_form_section('Color',3);
-	if (ci()->load->library_exists('plugin_colorpicker')) {
+	if ($plugin_colorpicker) {
 		plugin_colorpicker::picker('color',$record->color);
 	} else {
 		o::text('color',$record->color);
 	}
 	theme::end_form_section();
 } else {
-	o::hidden('color','d28445');
+	o::hidden('color',$record->color);
 }
 
-if (setting('Orange Theme','Show Menubar Icon')) {
+if (setting('Orange Theme','Show Menubar Icon') || $advanced) {
 	theme::start_form_section('Icon',3);
-	if (ci()->load->library_exists('plugin_fontawesome')) {
+	if ($plugin_fontawesome) {
 		plugin_fontawesome::dropdown('icon',$record->icon);
 	} else {
 		o::text('icon',$record->icon);
 	}
 	theme::end_form_section();
 } else {
-	o::hidden('icon','square');
+	o::hidden('icon',$record->icon);
 }
 
-if ($advanced == true && has_access('Orange::Advanced Menubar')) {	
+if (has_access('Orange::Advanced Menubar') && $advanced) {	
 	theme::start_form_section('Target',3);
 	o::text('target',$record->target);
 	theme::end_form_section();

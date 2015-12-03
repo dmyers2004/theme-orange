@@ -22,11 +22,13 @@ class menubarController extends APP_AdminController {
 	public function __construct() {
 		parent::__construct();
 		
-		if (setting('menubar','Show Color',false) && $this->load->library_exists('plugin_colorpicker')) {
+		if ($this->load->library_exists('plugin_colorpicker')) {
+			$this->page->data('plugin_colorpicker',true);
 			$this->load->library('plugin_colorpicker');
 		}
 
-		if (setting('menubar','Show Icon',false) && $this->load->library_exists('plugin_fontawesome')) {
+		if ($this->load->library_exists('plugin_fontawesome')) {
+			$this->page->data('plugin_fontawesome',true);
 			$this->load->library('plugin_fontawesome');
 		}
 	}
