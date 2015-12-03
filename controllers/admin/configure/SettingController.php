@@ -40,8 +40,6 @@ class settingController extends APP_AdminController {
 	}
 
 	public function newPostAction() {
-		$this->load->settings_flush();
-
 		if ($this->access['create']) {
 			$this->has_access($this->access['create']);
 		}
@@ -66,8 +64,6 @@ class settingController extends APP_AdminController {
 	}
 
 	public function editPostAction() {
-		$this->load->settings_flush();
-
 		if ($this->access['update']) {
 			$this->has_access($this->access['update']);
 		}
@@ -81,13 +77,6 @@ class settingController extends APP_AdminController {
 		}
 
 		$this->wallet->failed($this->content_title, $this->controller_path);
-	}
-
-	public function deleteAction($id=null) {
-		/* flush all cached settings */
-		$this->load->settings_flush();
-
-		parent::deleteAction($id);
 	}
 
 	public function list_allAction() {
