@@ -16,11 +16,10 @@ foreach ($records['records'] as $tab=>$tab_records) {
 
 	theme::table_start(['Name','Value','Managed'=>'text-center','Actions'=>'text-center']);
 
-/*
+	/* show them in the order they where entered */
 	uasort($tab_records,function($a,$b) {
-		return ($a->name > $b->name) ? 1 : -1;
+		return ($a->id > $b->id) ? 1 : -1;
 	});
-*/
 
 	foreach ($tab_records as $record) {
 		theme::table_start_tr();

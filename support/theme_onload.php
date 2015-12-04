@@ -12,7 +12,7 @@
 function theme_onload(&$page) {
 	/* https://cdnjs.com/ */
 	$page
-		->library(['theme','bootstrap_menu','Plugin_flash_msg','Plugin_select3','Plugin_o_dialog','Plugin_o_validate_form'])
+		->library(['theme','bootstrap_menu','Plugin_flash_msg','Plugin_select3','Plugin_o_dialog','Plugin_o_validate_form','Plugin_search_sort'])
 		->title('Orange Framework')
 		->css('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css',25)
 		->css('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css',50)

@@ -31,7 +31,7 @@ foreach ($records as $name=>$record) {
 	/* Description */
 	theme::table_row();
 	o::e($record['composer']['description']);
-	echo ' <a href="'.$controller_path.'/details/'.$record['url_name'].'"><i class="fa fa-info-circle"></i></a> ';
+	echo ' <a href="'.$controller_path.'/details/'.$record['url_name'].'"><i class="text-info fa fa-info-circle"></i></a> ';
 
 	/* Version */
 	theme::table_row('text-center');
@@ -49,31 +49,37 @@ foreach ($records as $name=>$record) {
 
 	/* show install */
 	if ($record['buttons']['error']) {
-		echo '<a href="'.$controller_path.'/details/'.$record['url_name'].'" class="btn btn-xs btn-primary"><i class="fa fa-info-circle"></i></a> ';
+		echo ' <button type="button" class="btn btn-xs btn-info" tabindex="0" data-placement="left" role="button" data-toggle="popover" data-trigger="focus" title="Required by" data-content="'.implode(chr(10),$record['is_required_by']).'"><i class="fa fa-info-circle"></i></button> ';
+	
+		//echo '<a href="'.$controller_path.'/details/'.$record['url_name'].'" class="btn btn-xs btn-primary"><i class="fa fa-info-circle"></i></a> ';
 	}
 
 	/* show install */
 	if ($record['buttons']['deactivate']) {
-		echo '<a href="'.$this->controller_path.'/deactivate/'.$record['url_name'].'" class="btn btn-xs btn-danger">Deactivate</a> ';
+		echo ' <a href="'.$this->controller_path.'/deactivate/'.$record['url_name'].'" class="btn btn-xs btn-danger">Deactivate</a> ';
 	}
 
 	if ($record['buttons']['activate']) {
-		echo '<a href="'.$this->controller_path.'/activate/'.$record['url_name'].'" class="btn btn-xs btn-default">Activate</a> ';
+		echo ' <a href="'.$this->controller_path.'/activate/'.$record['url_name'].'" class="btn btn-xs btn-default">Activate</a> ';
 	}
 
 	/* show upgrade */
 	if ($record['buttons']['upgrade']) {
-		echo '<a href="'.$this->controller_path.'/migrate/'.$record['url_name'].'" class="btn btn-xs btn-info">Migrate</a> ';
+		echo ' <a href="'.$this->controller_path.'/migrate/'.$record['url_name'].'" class="btn btn-xs btn-info">Migrate</a> ';
 	}
 
 	/* show uninstall */
 	if ($record['buttons']['uninstall']) {
-		echo '<a href="'.$this->controller_path.'/uninstall/'.$record['url_name'].'" data-name="'.$record['name'].'" class="btn btn-xs btn-warning js-uninstallable">Uninstall</a> ';
+		echo ' <a href="'.$this->controller_path.'/uninstall/'.$record['url_name'].'" data-name="'.$record['name'].'" class="btn btn-xs btn-warning js-uninstallable">Uninstall</a> ';
 	}
 
 	echo '</nobr>';
 	theme::table_end_tr();
 }
+
+echo '<script>document.addEventListener("DOMContentLoaded", function(event) {
+$(function () { $(\'[data-toggle="popover"]\').popover()})});
+</script>';
 
 theme::table_end();
 

@@ -22,3 +22,7 @@ $(function() {
 	});
 
 }); /* end onready */
+
+function convertToSlug(Text) {
+  return Text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_').replace(new RegExp("^[_]+"), "").replace(new RegExp("[_]+$"), "");
+};

@@ -24,7 +24,7 @@ class bootstrap_menu {
 		/* now we build the bootstrap menubar */
 		$nav = '';
 
-		if (!empty($hidden_on)) {
+		if (!empty($hidden_on) && ci()->page->data('hide_menubar') !== true) {
 			if (!preg_match('@,'.str_replace('*','[^,]*',$hidden_on).'@',',/'.ci()->uri->uri_string(),$matches)) {
 				$navbar = setting('Orange Themer','NavBar Inverse');
 				

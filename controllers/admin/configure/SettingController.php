@@ -20,7 +20,7 @@ class settingController extends APP_AdminController {
 	public $has_access = 'Orange::Manage Settings';
 
 	public function indexAction() {
-		$records = $this->o_setting_model->index('group,name');
+		$records = $this->o_setting_model->index('group,id');
 		$records = $this->_format_tabs($records,'group');
 
 		$this->page

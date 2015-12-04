@@ -19,8 +19,6 @@ class roleController extends APP_AdminController {
 	public $has_access 				= 'Orange::Manage Roles';
 
 	public function indexAction() {
-		$this->load->library('plugin_search_sort');
-
 		$records = $this->{$this->controller_model}->index('name');
 
 		$this->page->data('records',$records)->build($this->controller_path.'/index');
