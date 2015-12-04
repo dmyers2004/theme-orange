@@ -49,14 +49,29 @@ foreach ($records as $name=>$record) {
 
 	/* show install */
 	if ($record['buttons']['error']) {
-		echo ' <button type="button" class="btn btn-xs btn-info" tabindex="0" data-placement="left" role="button" data-toggle="popover" data-trigger="focus" title="Required by" data-content="'.implode(chr(10),$record['is_required_by']).'"><i class="fa fa-info-circle"></i></button> ';
+		$content = '';
+		
+		if (count($record['is_required_by']) > 0) {
+			$content .= '<b>Required By</b><br>'.implode('<br>',$record['is_required_by']).'<br>';
+		}
+		
+		if (count($record['package_not_available']) > 0) {
+			$content .= '<b>Not Available</b><br>'.implode('<br>',$record['package_not_available']).'<br>';
+		}
+		
+		if (count($record['package_not_active']) > 0) {
+			$content .= '<b>Not Active</b><br>'.implode('<br>',$record['package_not_active']).'<br>';
+		}
 	
-		//echo '<a href="'.$controller_path.'/details/'.$record['url_name'].'" class="btn btn-xs btn-primary"><i class="fa fa-info-circle"></i></a> ';
+		echo ' <button type="button" class="btn btn-xs btn-info" tabindex="0" data-html="true" data-placement="left" role="button" data-toggle="popover" data-trigger="focus" title="<b>Requirements</b>" data-content="'.$content.'"><i class="fa fa-info-circle"></i></button> ';
 	}
 
 	/* show install */
 	if ($record['buttons']['deactivate']) {
-		echo ' <a href="'.$this->controller_path.'/deactivate/'.$record['url_name'].'" class="btn btn-xs btn-danger">Deactivate</a> ';
+		/* make sure it's not these files (theme) */
+		if ($record['composer']['name'] != 'projectorangebox/theme-orange') {
+			echo ' <a href="'.$this->controller_path.'/deactivate/'.$record['url_name'].'" class="btn btn-xs btn-danger">Deactivate</a> ';
+		}
 	}
 
 	if ($record['buttons']['activate']) {
@@ -79,7 +94,7 @@ foreach ($records as $name=>$record) {
 
 echo '<script>document.addEventListener("DOMContentLoaded", function(event) {
 $(function () { $(\'[data-toggle="popover"]\').popover()})});
-</script>';
+</script><style>.popover{ min-width: 400px }</style>';
 
 theme::table_end();
 
