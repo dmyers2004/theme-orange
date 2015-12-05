@@ -1,6 +1,9 @@
 <?php
 theme::header_start('Packages');
 Plugin_search_sort::field();
+if (has_access('package::refresh')) {
+	theme::header_button('Refresh',$controller_path.'/flush','refresh');
+}
 o::view_event($controller_path,'header.buttons');
 theme::header_end();
 

@@ -57,28 +57,18 @@ class packagesController extends APP_AdminController {
 			->build();
 	}
 
-	public function autoloadAction() {
-		$this->_process(null,'create_autoload','Autoload Updated');
+	public function flushAction() {
+		$this->package_manager->flush(true);
+
+		$this->wallet->success('Updated',$this->controller_path);
 	}
 	
-	public function onloadAction() {
-		$this->_process(null,'create_onload','Onload Updated');
-	}
-
 	protected function _process($name,$method,$action) {
-		$packagename = '';
-
-		if ($name !== null) {
-			$key = hex2bin($name);
-			$packagename = 'Package "'.$this->package_manager->packages[$key]['composer']['name'].'" ';
-		}
-
-		/* dump all caches */
-		$this->cache->clean();
-
-		/* also refresh the user data */
-		$this->auth->refresh_userdata();
-
+		$key = hex2bin($name);
+		$packagename = 'Package "'.$this->package_manager->packages[$key]['composer']['name'].'" ';
+		
+		/* the package mgr flushes all nessesary data */
+		
 		if ($this->package_manager->$method($key)) {
 			$this->wallet->success($packagename.$action.'.',$this->controller_path);
 		}
