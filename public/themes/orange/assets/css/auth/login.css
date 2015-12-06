@@ -26,7 +26,8 @@ input:focus,select:focus,textarea:focus,button:focus {
 	left: 0;
 	width: 300px;
 	text-align: center;
-	font-size: 38px
+	font-size: 38px;
+	color: #333;
 }
 
 .login-area p {
@@ -35,7 +36,8 @@ input:focus,select:focus,textarea:focus,button:focus {
 	left: 0;
 	width: 300px;
 	text-align: center;
-	font-size: 18px
+	font-size: 18px;
+	color: #333;
 }
 
 .login-area #email {
@@ -43,7 +45,8 @@ input:focus,select:focus,textarea:focus,button:focus {
 	height: 32px;
 	border: 0;
 	padding-left: 4px;
-	background: transparent
+	background: transparent;
+	color: #333;
 }
 
 .login-area #password {
@@ -51,14 +54,8 @@ input:focus,select:focus,textarea:focus,button:focus {
 	height: 32px;
 	border: 0;
 	padding-left: 4px;
-	background: transparent
-}
-
-.login-area #remember {
-	position: relative;
-	top: 139px;
-	left: 67px;
-	height: 32px
+	background: transparent;
+	color: #333;	
 }
 
 .login-area #submit-button {
@@ -67,7 +64,7 @@ input:focus,select:focus,textarea:focus,button:focus {
 	left: 38px;
 	height: 32px;
 	line-height: 0;
-	width: 222px
+	width: 222px;
 }
 
 .login-area .extra {
