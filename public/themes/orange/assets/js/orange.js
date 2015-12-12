@@ -21,14 +21,16 @@ $(function() {
 		}
 	});
 
+	$('table').stickyTableHeaders({fixedOffset: $('#navbar')});
+
+	$('.human-input').keyup(function(index) {
+		if ($('#id').val() == '-1') {
+			$('.computer-input').val(slugger($(this).val()));
+		}
+	});
+
 }); /* end onready */
 
 function convertToSlug(Text) {
   return Text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_').replace(new RegExp("^[_]+"), "").replace(new RegExp("[_]+$"), "");
 };
-
-$('.human-input').keyup(function(index) {
-	if ($('#id').val() == '-1') {
-		$('.computer-input').val(slugger($(this).val()));
-	}
-});

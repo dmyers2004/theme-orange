@@ -234,7 +234,7 @@ class Theme {
 		$defaults = ['class' => '', 'style' => '', 'id' => '','tbody_class' => ''];
 		extract(array_diff_key($defaults, $extra) + array_intersect_key($extra, $defaults));
 
-		echo '<table class="table table-hover '.$class.'" id="'.$id.'" style="'.$style.'"><thead><tr class="panel-default">';
+		echo '<table class="table table-hover sortable '.$class.'" id="'.$id.'" style="'.$style.'"><thead><tr class="panel-default">';
 
 		foreach ($column_names as $key=>$name) {
 			$class = '';
@@ -247,7 +247,7 @@ class Theme {
 			echo '<th class="panel-heading '.$class.'">'.$name.'</th>';
 		}
 
-		echo '</tr></thead><tbody class="'.$tbody_class.'">';
+		echo '</tr></thead><tbody class="searchable '.$tbody_class.'">';
 	}
 
 	/* table tabs */
