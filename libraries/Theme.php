@@ -77,7 +77,7 @@ class Theme {
 	}
 
 	static public function start_inline_checkbox() {
-		echo '<nobr style="top:8px;position:relative;padding:0 16px 16px 0;display:inline-block">';
+		echo '<nobr style="top:6px;position:relative;padding:0 16px 16px 0;display:inline-block">';
 	}
 
 	static public function end_inline_checkbox() {
@@ -85,7 +85,7 @@ class Theme {
 	}
 
 	static public function start_inline_radio() {
-		echo '<nobr style="top:8px;position:relative;padding:0 16px 16px 0;display:inline-block">';
+		echo '<nobr style="top:6px;position:relative;padding:0 16px 16px 0;display:inline-block">';
 	}
 
 	static public function end_inline_radio() {
