@@ -117,7 +117,13 @@ class Theme {
 	}
 
 	static public function iif($expression, $returntrue, $returnfalse = '', $echo = false) {
-		echo $expression ? $returntrue : $returnfalse;
+		$results = $expression ? $returntrue : $returnfalse;
+		
+		if ($echo) {
+			echo $results;
+		}
+		
+		return $results;
 	}
 
 	static public function block_hide($name,$bol=null) {
